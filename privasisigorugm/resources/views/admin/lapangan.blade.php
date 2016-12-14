@@ -20,7 +20,7 @@
               <h3 class="box-title">Lapangan</h3>
             </div>
             <!-- /.box-header -->
-            <!-- form start -->
+             <!-- form start -->
             <br>
             <a href="{{ URL('tambah-lapangan') }}">
               <button class="btn btn-primary">Tambah</button></a>
@@ -38,6 +38,7 @@
                 <tr>
                   <th>No</th>
                   <th>Nama Lapangan</th>
+                  <th>Jenis Lapangan</th>
                   <th>Aksi</th>
                 </tr>
                 </thead>
@@ -49,6 +50,7 @@
 
                     <td>{{$no++}}</td>
                     <td>{{$data->nama_lapangan}}</td>
+                    <td>{{$data->nama}}</td>
                     <td><a href="edit-lapangan/{{$data->id_lapangan}}"><button class="btn btn-warning"><span class="glyphicon glyphicon-pencil"> Ubah</span></button></a>
                     <a href="hapus-lapangan/{{$data->id_lapangan}}"><button class="btn btn-danger"><span class="glyphicon glyphicon-trash"> Hapus</span></button></a></td>
                   </tr>

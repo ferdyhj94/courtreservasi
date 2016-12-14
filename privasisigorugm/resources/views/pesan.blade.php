@@ -187,79 +187,14 @@
 
                 function loadResources() 
                 {
-              <?php
-
-                class Group {}
-                class Resource {}
-
-                $groups = array();
-
-                foreach($scheduler_groups as $group) {
-                  $g = new Group();
-                  $g->id = "group_".$group['id'];
-                  $g->name = $group['name'];
-                  $g->expanded = true;
-                  $g->children = array();
-                  $g->eventHeight = 25;
-                  $groups[] = $g;
-                  
-                  $stmt = $db->prepare('SELECT * FROM [resources] WHERE [group_id] = :group ORDER BY [name]');
-                  $stmt->bindParam(':group', $group['id']);
-                  $stmt->execute();
-                  $scheduler_resources = $stmt->fetchAll();  
-                  
-                  foreach($scheduler_resources as $resource) {
-                    $r = new Resource();
-                    $r->id = $resource['id'];
-                    $r->name = $resource['name'];
-                    $g->children[] = $r;
-                  }
-                }
-
-                header('Content-Type: application/json');
-                echo json_encode($groups);
-
-                ?>
+           dp.rows.load({{action('Frontend@backend_resource')}});
 
                 }
                 
                 function loadEvents() 
                 {
-                <?php
-
-                $json = file_get_contents('php://input');
-                $params = json_decode($json);
-
-                $stmt = $db->prepare('SELECT * FROM [events] WHERE NOT ((end <= :start) OR (start >= :end))');
-                $stmt->bindParam(':start', $params->start);
-                $stmt->bindParam(':end', $params->end);
-                $stmt->execute();
-                $result = $stmt->fetchAll();
-
-                class Event {}
-                $events = array();
-
-                foreach($result as $row) {
-                $e = new Event();
-                $e->id = $row['id'];
-                $e->text = "";
-                $e->start = $row['start'];
-                $e->end = $row['end'];
-                $e->resource = $row['resource_id'];
-                $e->moveDisabled = true;
-                $e->resizeDisabled = true;
-                $e->clickDisabled = true;
-                $e->backColor = "#E69138";   // lighter #F6B26B
-                $e->bubbleHtml = "Not Available";
-
-                $events[] = $e;
-                }
-
-                header('Content-Type: application/json');
-                echo json_encode($events);
-
-                ?>
-    
+               
+            dp.rows.load({{action('frontend@backend_event_busy')}})
                 }
                 
             </script>

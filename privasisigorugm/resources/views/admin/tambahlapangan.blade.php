@@ -30,6 +30,14 @@
                   <input type="text" class="form-control" name="nama_lapangan" id="nama_lapangan" placeholder="Nama Lapangan">
                 </div>
               </div>
+              
+                <div class="form-group">
+                  <label>Jenis Lapangan</label>
+                  <select name="jenis_lapangan" class="form-control">
+                  <option value="1">Lapangan Badminton</option>
+                  <option value="2">Lapangan Tenis</option>
+                  </select>
+              </div>
               <!-- /.box-body -->
 
               <div class="box-footer">

@@ -17,15 +17,18 @@ class managedLapangan extends Controller
      */
 
     public function createLapangan(){
-        $data = array('nama_lapangan'=>Request::get('nama_lapangan'));
+        $data = array('nama_lapangan'=>Request::get('nama_lapangan'),'jenis_lapangan'=>Request::get('jenis_lapangan'));
 
         DB::table('lapangan')->insert($data);
         return Redirect::to('lapangan')->with('message','Berhasil menambah data lapangan!');
     }
 
     public function showLapangan(){
-        $lapangan = lapangan::all();
 
+        $lapangan = DB::table('lapangan')
+            ->join('groups', 'lapangan.jenis_lapangan', '=', 'groups.id_group')
+            ->select('lapangan.nama_lapangan','groups.nama')
+            ->get();
         return view('admin.lapangan')->with('lapangan',$lapangan);
     }
 

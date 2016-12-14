@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Classes\Event;
+use App\Classes\Group;
+use App\Classes\Resource;
 use App\Jadwal;
+use App\Lapangan;
+use App\Groups;
 use Request;
 use Auth;
 use Input;
 use DB;
 use Redirect;
+use View;
+
 class Frontend extends Controller
 {
     public function postOrder()
@@ -27,12 +34,61 @@ class Frontend extends Controller
 
     public function pesanLapangan()
     {
-         $scheduler_groups = DB::table('lapangan')
-                ->orderBy('nama_lapangan', 'asc')
-                ->get();
+        
+       
+      return view('pesan');
+    }
 
-      return view('pesan')->with($scheduler_groups);
+    public function backend_event_busy()
+    {
+        $result = DB::table('jadwal')->get();
+        
+        $events = array();
 
+        foreach($result as $row) {
+          $e = new Event();
+          $e->id = $row['id'];
+          $e->text = "";
+          $e->start = $row['start'];
+          $e->end = $row['end'];
+          $e->resource = $row['resource_id'];
+          $e->moveDisabled = true;
+          $e->resizeDisabled = true;
+          $e->clickDisabled = true;
+          $e->backColor = "#E69138";   // lighter #F6B26B
+          $e->bubbleHtml = "Not Available";
+          
+          $events[] = $e;
+}
+
+        header('Content-Type: application/json');
+        echo json_encode($events);
+    }
+    public function backend_resource()
+    {
+         $scheduler_groups = DB::table('groups')->get();
+
+         $groups = array();
+         foreach($scheduler_groups as $group)
+         {
+          $g = new Group();
+          $g->id = "group_".$group['id_group'];
+          $g->name = $group['nama'];
+          $g->expanded = true;
+          $g->children = array();
+          $g->eventHeight = 25;
+          $groups[] = $g;
+
+          $scheduler_resource = DB::table('lapangan')->get();
+
+          foreach($scheduler_resource as $resource)
+          {
+            $r = new Resource();
+            $r->id = $resource['id'];
+            $r->name = $resource['name'];
+            $g->children[] = $r;
+          }
+         }
     }
 
     public function login()
